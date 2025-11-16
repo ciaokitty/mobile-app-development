@@ -20,7 +20,7 @@ Below are some screenshots of Flow in action:
 
 | Calendar View | Symptom Logging | Weight Tracker | Activity Log | Settings |
 |:-----------:|:-------------:|:---------------:|:---------------:|:---------------:|
-| ![Calendar](assets/app_screenshots/calendar.png) | ![Symptoms](assets/app_screenshots/log-today-1.png) | ![WeightTracker](assets/app_screenshots/weight-tracker-month.png) | ![ActivityLog](assets/app_screenshots/activity-log.png)| ![Settings](assets/app_screenshots/settings.png)
+| ![Calendar](assets/app_screenshots/calendar.jpg) | ![Symptoms](assets/app_screenshots/symptoms.jpg | ![WeightTracker](assets/app_screenshots/weight-tracker.jpg) | ![ActivityLog](assets/app_screenshots/activity-log.jpg)| ![Settings](assets/app_screenshots/settings.jpg)
 
 ## Development Notes
 
