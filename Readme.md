@@ -12,7 +12,7 @@ A privacy-first period and health tracking app for mobile devices, built with Re
 - **Activity Log:** See a timeline of your recent period, symptoms, and weight entries.
 - **Data Persistence:** All your data is stored locally on your device in a private, persistent file (no cloud or account required).
 - **Privacy:** No data ever leaves your device. No ads, no tracking, no accounts.
-- **Free & Open Source:** This app is free to use, open-source, and licensed under the MIT License.
+
 
 ## Screenshots
 
@@ -22,15 +22,7 @@ Below are some screenshots of Flow in action:
 |:-----------:|:-------------:|:---------------:|:---------------:|:---------------:|
 | ![Calendar](assets/app_screenshots/calendar.png) | ![Symptoms](assets/app_screenshots/log-today-1.png) | ![WeightTracker](assets/app_screenshots/weight-tracker-month.png) | ![ActivityLog](assets/app_screenshots/activity-log.png)| ![Settings](assets/app_screenshots/settings.png)
 
-
-
-## License
-
-This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute it.
-
 ## Development Notes
-
-_AI USE DISCLAIMER: This app was created with the help of AI coding tools._
 
 ### For local hosting / testing:
 
