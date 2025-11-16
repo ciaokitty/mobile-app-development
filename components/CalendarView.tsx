@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, PanResponder } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAppState } from '@/components/AppStateContext';
 import { useTheme } from '@/components/theme';
 import { getDaysInMonth, getFirstDayOfWeek, isToday, toDateKey } from '@/features/dateUtils';
@@ -24,7 +23,10 @@ export default function CalendarView({ setSelectedDay, setDayModalVisible }: Cal
     predictedPeriods,
     predictedFertileWindow,
     predictedOvulationDay,
-    sexLogs
+    sexLogs,
+    weightLogs,
+    textLogs,
+    moodLogs
   } = useAppState();
 
   const today = new Date();
@@ -168,12 +170,18 @@ export default function CalendarView({ setSelectedDay, setDayModalVisible }: Cal
                 item && isToday(item) && styles.todayCell,
                 item && isToday(item) && { borderColor: theme.todayColor, shadowColor: theme.todayColor }
               ]}>
-                {item && (symptomLogs[toDateKey(item)]?.length > 0) && (
-                  <MaterialCommunityIcons name="note-outline" size={16} color={theme.todayColor} style={{ position: 'absolute', top: 4, right: 4 }} />
-                )}
-                {item && sexLogs[toDateKey(item)] && sexLogs[toDateKey(item)].length > 0 && (
-                  <Text style={{ position: 'absolute', top: 4, left: 4, fontSize: 15, color: theme.error }}>❤️</Text>
-                )}
+                {item && (() => {
+                  const dateKey = toDateKey(item);
+                  const hasSymptomLogs = symptomLogs[dateKey]?.length > 0;
+                  const hasSexLogs = sexLogs[dateKey]?.length > 0;
+                  const hasWeightLogs = !!weightLogs[dateKey];
+                  const hasTextLogs = !!textLogs[dateKey];
+                  const hasMoodLogs = moodLogs[dateKey] && (moodLogs[dateKey].mood > 0 || moodLogs[dateKey].anxiety > 0 || moodLogs[dateKey].depression > 0);
+                  const hasAnyLogs = hasSymptomLogs || hasSexLogs || hasWeightLogs || hasTextLogs || hasMoodLogs;
+                  return hasAnyLogs ? (
+                    <View style={{ position: 'absolute', top: 4, right: 4, width: 8, height: 8, borderRadius: 4, backgroundColor: '#FF0000' }} />
+                  ) : null;
+                })()}
                 <Text style={[
                   styles.dayText,
                   { color: theme.text },

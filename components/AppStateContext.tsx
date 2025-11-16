@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { View, Text, Switch, Platform } from 'react-native';
 import { DEFAULT_SYMPTOMS } from '@/features/symptomUtils';
-import { File, Paths } from 'expo-file-system';
-// Use new File API for Expo SDK 54+
+import * as FileSystem from 'expo-file-system/legacy';
 import { DateRange } from '@/features/DateRange';
 import { DateRangeList } from '@/features/DateRangeList';
 import { CycleUtils } from '@/features/CycleUtils';
@@ -97,8 +96,8 @@ export interface AppState {
 
 const AppStateContext = createContext<AppState | undefined>(undefined);
 
-// Use new File API for Expo SDK 54+
-const DATA_FILE = new File(Paths.document, 'appState.json');
+// File path for storing app state
+const DATA_FILE_PATH = `${FileSystem.documentDirectory}appState.json`;
 
 // Cross-platform storage helpers
 const storage = {
@@ -108,7 +107,7 @@ const storage = {
       return data ? JSON.parse(data) : null;
     } else {
       try {
-        const file = await DATA_FILE.text();
+        const file = await FileSystem.readAsStringAsync(DATA_FILE_PATH);
         return JSON.parse(file);
       } catch {
         return null;
@@ -126,7 +125,7 @@ const storage = {
     if (Platform.OS === 'web') {
       window.localStorage.setItem('appState', JSON.stringify(toSave));
     } else {
-      await DATA_FILE.write(JSON.stringify(toSave));
+      await FileSystem.writeAsStringAsync(DATA_FILE_PATH, JSON.stringify(toSave));
     }
   }
 };

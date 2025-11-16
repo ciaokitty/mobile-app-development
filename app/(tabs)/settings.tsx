@@ -1,11 +1,10 @@
 import * as Sharing from 'expo-sharing';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { exportLogsToCSV } from '@/features/ExportUtils';
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert, ScrollView, TextInput, Modal, Switch, Pressable, StyleSheet, Platform } from 'react-native';
 import { useAppState } from '@/components/AppStateContext';
 import { useTheme } from '@/components/theme';
-import { File, Paths } from 'expo-file-system';
 import { DEFAULT_SYMPTOMS } from '@/features/symptomUtils';
 import { DateRangeList } from '@/features/DateRangeList';
 import { CommonStyles } from '@/components/CommonStyles';
@@ -20,10 +19,27 @@ export default function SettingsScreen () {
       textLogs: appState.textLogs,
       moodLogs: appState.moodLogs,
     });
-    const fileUri = FileSystem.cacheDirectory + 'period-tracker-export.csv';
-    // @ts-ignore: Expo SDK 54+ uses FileSystem.writeAsStringAsync
-    await FileSystem.writeAsStringAsync(fileUri, csv, { encoding: 'utf8' });
-    await Sharing.shareAsync(fileUri, { mimeType: 'text/csv', dialogTitle: 'Export Logs as CSV' });
+    
+    if (Platform.OS === 'web') {
+      // Web: Create blob and download
+      if (typeof document !== 'undefined') {
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'period-tracker-export.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+    } else {
+      // Mobile: Use FileSystem and Sharing
+      const fileUri = FileSystem.cacheDirectory + 'period-tracker-export.csv';
+      await FileSystem.writeAsStringAsync(fileUri, csv, { encoding: 'utf8' });
+      await Sharing.shareAsync(fileUri, { mimeType: 'text/csv', dialogTitle: 'Export Logs as CSV' });
+    }
   };
   const appState = useAppState();
   const { weightUnit, setWeightUnit, setWeightLogs, 
@@ -56,18 +72,9 @@ export default function SettingsScreen () {
         >
           <Text style={{ color: theme.fabText, fontWeight: 'bold', fontSize: 16 }}>Export as CSV</Text>
         </TouchableOpacity>
-      </View>
-      <Text style={{ color: theme.text, fontSize: 18, marginTop: 32, marginBottom: 8 }}>Export Data</Text>
-      <View style={{ width: '90%', marginBottom: 16 }}>
-        <TouchableOpacity
-          style={{ backgroundColor: theme.accent, borderRadius: 8, padding: 14, alignItems: 'center', marginBottom: 8 }}
-          onPress={handleExportCSV}
-        >
-          <Text style={{ color: theme.fabText, fontWeight: 'bold', fontSize: 16 }}>Export as CSV</Text>
-        </TouchableOpacity>
         {/* Excel export can be added here in the future */}
       </View>
-  <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: theme.background }}>      
+
       {/* --- Dummy Data Toggle --- */}
       <Text style={{ color: theme.text, fontSize: 18, marginTop: 32, marginBottom: 8 }}>Demo / Dummy Data</Text>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16, width: '90%', backgroundColor: theme.card, borderRadius: 8, padding: 12, shadowColor: theme.accent, shadowOpacity: 0.08, shadowRadius: 4, elevation: 2 }}>
@@ -252,7 +259,8 @@ export default function SettingsScreen () {
                 {
                   text: 'Delete', style: 'destructive', onPress: async () => {
                     try {
-                      await new File(Paths.document, 'appState.json').delete();
+                      const filePath = `${FileSystem.documentDirectory}appState.json`;
+                      await FileSystem.deleteAsync(filePath, { idempotent: true });
                     } catch {}
                     setWeightLogs({});
 

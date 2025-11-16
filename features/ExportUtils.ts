@@ -6,8 +6,6 @@
 import { DateRangeList } from '@/features/DateRangeList';
 import { WeightLog } from '@/components/AppStateContext';
 
-import { DateRangeList } from '@/features/DateRangeList';
-import { WeightLog } from '@/components/AppStateContext';
 export function exportLogsToCSV({
   periodRanges,
   symptomLogs,
