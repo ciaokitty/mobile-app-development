@@ -1,6 +1,6 @@
 # Flow
 
-A privacy-first period and health tracking app for mobile devices, built with React Native and Expo. It contains no ads, doesn't ask for an account, and only stores your data locally. Made with love by a female software engineer vibe-coding a period tracking app for herself. 
+A privacy-first period and health tracking app for mobile devices, built with React Native and Expo. It contains no ads, doesn't ask for an account, and only stores your data locally.
 
 ## Key Features
 
@@ -35,11 +35,9 @@ npx expo prebuild
 npx expo run:android
 ```
 
-Tip: Sometimes, running your app in production mode locally will show errors that normally wouldn't be thrown. You can run the app locally in production by running `npx expo start --no-dev --minify`. `--no-dev` tells the server not to be run in development mode, and `--minify` is used to minify your code the same way it is for production JavaScript bundles.
-
 
 ### Installing the apk from Expo:
-To install your React Native (Expo) app as an APK on your Android phone, follow these steps:
+To install your React Native (Expo) app as an APK on your Android phone:
 
 #### 1. Build the APK
 
@@ -81,12 +79,3 @@ If you are using **Expo Managed Workflow**:
 2. On your phone, **open the APK file**.
 3. If prompted, allow installation from unknown sources.
 4. Follow the prompts to install the app.
-
-
-**Note:**  
-If you are using the Bare React Native workflow, you’ll need to run `./gradlew assembleRelease` in the `android` directory and find the APK in `android/app/build/outputs/apk/release/app-release.apk`.
-
-### Updating Dependencies
-
-Run the following command to update dependencies to ensure compatibility with Expo:
-`npx expo install --check`
